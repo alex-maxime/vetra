@@ -28,7 +28,7 @@ export class Movement implements MovementInterface {
     example: 'Hotel F.1 1 nuit et 1 persone',
   })
   @IsString()
-  wording: string;
+  label: string;
 
   @ApiProperty({
     description: 'Montant de la transaction',
@@ -40,9 +40,5 @@ export class Movement implements MovementInterface {
 
   @ApiHideProperty()
   @IsOptional()
-  status?:
-    | TransactionStatus.VALID
-    | TransactionStatus.INVALID
-    | TransactionStatus.DUPLICATED
-    | TransactionStatus.NO_CHECK_POINT = TransactionStatus.VALID;
+  status?: TransactionStatus.VALID | TransactionStatus.INVALID | TransactionStatus.DUPLICATED | TransactionStatus.NO_CHECK_POINT = TransactionStatus.VALID;
 }

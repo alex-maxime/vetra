@@ -28,4 +28,5 @@ async function bootstrap() {
   output += `  ▸ server:  ${serverConf.server}`;
   console.info(output);
 }
+
 bootstrap();

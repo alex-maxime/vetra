@@ -8,13 +8,8 @@ let ip = '127.0.0.1';
 // To have the IP address on the network
 // It will help to configure EXPO App
 if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
-  const netInterfaces =
-    (!!os && 'networkInterfaces' in os && os.networkInterfaces()) || null;
-  if (
-    !!netInterfaces &&
-    !!Object.values(netInterfaces) &&
-    Object.values(netInterfaces).length > 0
-  ) {
+  const netInterfaces = (!!os && 'networkInterfaces' in os && os.networkInterfaces()) || null;
+  if (!!netInterfaces && !!Object.values(netInterfaces) && Object.values(netInterfaces).length > 0) {
     const interfaces = (Object.values(netInterfaces) || []).flat();
     if (interfaces && interfaces.length > 0) {
       const inet: any = Object.values(netInterfaces)

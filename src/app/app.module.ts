@@ -1,10 +1,4 @@
-import {
-  Global,
-  Module,
-  OnApplicationBootstrap,
-  OnModuleInit,
-  ValidationPipe,
-} from '@nestjs/common';
+import { Global, Module, OnApplicationBootstrap, OnModuleInit, ValidationPipe } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import config from './core/config';
 import { consola } from 'consola';
@@ -61,9 +55,7 @@ export class AppModule implements OnApplicationBootstrap, OnModuleInit {
     if (env !== 'test') {
       const canUsePort = await isPortFree(serverConf.port);
       if (!canUsePort) {
-        throw new Error(
-          `port: ${serverConf.port} cannot be used, configure another port in .env file or ensure this one is free`,
-        );
+        throw new Error(`port: ${serverConf.port} cannot be used, configure another port in .env file or ensure this one is free`);
       }
     }
   }

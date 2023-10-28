@@ -15,8 +15,7 @@ export class ValidateMovementsRequestDto {
   })
   @IsArray()
   @ArrayUnique<Movement>((o: Omit<Movement, 'status'>) => o.id, {
-    message:
-      "Des opérations bancaires possèdent le même 'id'. Assurez vous d'envoyer des élements avec un ID unique",
+    message: "Des opérations bancaires possèdent le même 'id'. Assurez vous d'envoyer des élements avec un ID unique",
   })
   @ValidateNested({ each: true })
   @Type(() => Movement)

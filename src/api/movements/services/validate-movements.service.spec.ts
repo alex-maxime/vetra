@@ -27,16 +27,16 @@ describe('MovementsService', () => {
   });
 
   /** Failed to test 🥲
-  it('should throw a MovementException', () => {
-    const parsed = {
-      movements: DuplicateMovementsRequest.movements.map((m) => {
-        return { ...m, date: new Date(m.date) };
-      }),
-      balances: DuplicateMovementsRequest.balances.map((b) => {
-        return { ...b, date: new Date(b.date) };
-      }),
-    };
-    expect(service.isValid(parsed)).toBeInstanceOf(MovementException);
-  });
-    */
+   it('should throw a MovementException', () => {
+   const parsed = {
+   movements: DuplicateMovementsRequest.movements.map((m) => {
+   return { ...m, date: new Date(m.date) };
+   }),
+   balances: DuplicateMovementsRequest.balances.map((b) => {
+   return { ...b, date: new Date(b.date) };
+   }),
+   };
+   expect(service.isValid(parsed)).toBeInstanceOf(MovementException);
+   });
+   */
 });

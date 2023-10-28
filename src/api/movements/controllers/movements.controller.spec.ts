@@ -15,9 +15,7 @@ describe('MovementsController', () => {
     }).compile();
 
     controller = module.get<MovementsController>(MovementsController);
-    movementsServices = module.get<ValidateMovementsService>(
-      ValidateMovementsService,
-    );
+    movementsServices = module.get<ValidateMovementsService>(ValidateMovementsService);
   });
 
   it('should be defined', () => {
@@ -27,20 +25,14 @@ describe('MovementsController', () => {
   it('validateMovements success', () => {
     const response = { message: 'Accepted' };
     jest.spyOn(movementsServices, 'isValid').mockImplementation(() => response);
-    expect(
-      controller.validateMovements(
-        ValidMovementsRequest as ValidateMovementsRequestDto,
-      ),
-    ).toBe(response);
+    // @ts-ignore
+    expect(controller.validateMovements(ValidMovementsRequest as ValidateMovementsRequestDto)).toBe(response);
   });
 
   it('validateMovements fail', () => {
     const response = {
       message: {
-        message: [
-          'movements.0.property idx should not exist',
-          'movements.0.id must be a number conforming to the specified constraints',
-        ],
+        message: ['movements.0.property idx should not exist', 'movements.0.id must be a number conforming to the specified constraints'],
         error: 'Bad Request',
         statusCode: 400,
       },
@@ -53,19 +45,19 @@ describe('MovementsController', () => {
         {
           idx: 1,
           date: '2023-01-01',
-          wording: 'Transaction Bancaire',
+          label: 'Transaction Bancaire',
           amount: 1000,
         },
         {
           id: 2,
           date: '2023-01-01',
-          wording: 'Transaction Bancaire',
+          label: 'Transaction Bancaire',
           amount: 3000,
         },
         {
           id: 3,
           date: '2023-01-01',
-          wording: 'Transaction Bancaire',
+          label: 'Transaction Bancaire',
           amount: -1000,
         },
       ],
@@ -76,9 +68,9 @@ describe('MovementsController', () => {
         },
       ],
     };
+    // @ts-ignore
     jest.spyOn(movementsServices, 'isValid').mockImplementation(() => response);
-    expect(
-      controller.validateMovements(body as ValidateMovementsRequestDto),
-    ).toBe(response);
+    // @ts-ignore
+    expect(controller.validateMovements(body as ValidateMovementsRequestDto)).toBe(response);
   });
 });

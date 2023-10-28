@@ -5,11 +5,7 @@ import { CheckPoint } from './movements/entities/check-point.entity';
 export declare type Reason = {
   data?: Movement[];
   checkpoint?: CheckPoint;
-  reason:
-    | ReasonStatus.DUPLICATE_TRANSACTION_ENTRY
-    | ReasonStatus.MISSING_TRANSACTION_ENTRY
-    | ReasonStatus.MISSING_CHECK_POINT
-    | ReasonStatus.MISSMATCH_TRANSACTION_AND_CHECK_POINT;
+  reason: ReasonStatus.DUPLICATE_TRANSACTION_ENTRY | ReasonStatus.MISSING_TRANSACTION_ENTRY | ReasonStatus.MISSING_CHECK_POINT | ReasonStatus.MISSMATCH_TRANSACTION_AND_CHECK_POINT;
 };
 
 export declare type ExceptionResponseBody = {

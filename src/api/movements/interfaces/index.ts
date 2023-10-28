@@ -9,11 +9,7 @@ export interface CheckPointInterface {
 export interface MovementInterface {
   id: number;
   date: Date;
-  wording: string;
+  label: string;
   amount: number;
-  status?:
-    | TransactionStatus.VALID
-    | TransactionStatus.INVALID
-    | TransactionStatus.DUPLICATED
-    | TransactionStatus.NO_CHECK_POINT;
+  status?: TransactionStatus.VALID | TransactionStatus.INVALID | TransactionStatus.DUPLICATED | TransactionStatus.NO_CHECK_POINT;
 }

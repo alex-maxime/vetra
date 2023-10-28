@@ -17,10 +17,7 @@ export class ValidateMovementsService {
     this.movementsService = new MovementsListService(validation.movements);
     this.checkPointService = new CheckPointsListService(validation.balances);
     // 1 - On si on a des points de contrôles et des transactions
-    if (
-      this.movementsService.hasMovements() &&
-      !this.checkPointService.hasCheckPoints()
-    ) {
+    if (this.movementsService.hasMovements() && !this.checkPointService.hasCheckPoints()) {
       throw new MovementException([
         {
           reason: ReasonStatus.MISSING_CHECK_POINT,
@@ -44,10 +41,8 @@ export class ValidateMovementsService {
 
     // 3 - On vérifie s'il y a des points de contrôle manquant
     //     des transactions après le dernier point de contrôle
-    const lastCheckPoint: CheckPoint =
-      this.checkPointService.getLastCheckPoint();
-    const movementAfterCheckPoint: Movement[] =
-      this.movementsService.getMovementsAfterCheckPoint(lastCheckPoint);
+    const lastCheckPoint: CheckPoint = this.checkPointService.getLastCheckPoint();
+    const movementAfterCheckPoint: Movement[] = this.movementsService.getMovementsAfterCheckPoint(lastCheckPoint);
 
     if (movementAfterCheckPoint.length > 0) {
       throw new MovementException([
@@ -69,32 +64,17 @@ export class ValidateMovementsService {
     let lastValidCheckPoint: CheckPoint;
     let lastTotal: number = 0;
 
-    for (
-      let index = 0;
-      index < this.checkPointService.checkPoints.length;
-      index++
-    ) {
+    for (let index = 0; index < this.checkPointService.checkPoints.length; index++) {
       const lastCheckPointElement = this.checkPointService.checkPoints[index];
 
-      const movements = lastValidCheckPoint
-        ? this.movementsService.getMovementsBetweenCheckPoint(
-            lastValidCheckPoint,
-            lastCheckPointElement,
-          )
-        : this.movementsService.getMovementsBeforeCheckPoint(
-            lastCheckPointElement,
-          );
+      const movements = lastValidCheckPoint ? this.movementsService.getMovementsBetweenCheckPoint(lastValidCheckPoint, lastCheckPointElement) : this.movementsService.getMovementsBeforeCheckPoint(lastCheckPointElement);
 
-      const calcul =
-        lastTotal + MovementsListService.getTotalBalanceOfMovements(movements);
+      const calcul = lastTotal + MovementsListService.getTotalBalanceOfMovements(movements);
 
       if (calcul !== lastCheckPointElement.balance) {
         throw new MovementException([
           {
-            reason:
-              lastTotal < lastCheckPointElement.balance
-                ? ReasonStatus.MISSING_TRANSACTION_ENTRY
-                : ReasonStatus.MISSMATCH_TRANSACTION_AND_CHECK_POINT,
+            reason: calcul < lastCheckPointElement.balance ? ReasonStatus.MISSING_TRANSACTION_ENTRY : ReasonStatus.MISSMATCH_TRANSACTION_AND_CHECK_POINT,
             checkpoint: lastCheckPointElement,
             data: movements.map((movement) => ({
               ...movement,

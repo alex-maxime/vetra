@@ -17,7 +17,7 @@ $ npm install
 # development
 $ npm run start
 
-# watch mode
+# ou watch mode
 $ npm run start:dev
 ```
 

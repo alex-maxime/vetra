@@ -11,9 +11,7 @@ import { ServerConf } from './types';
 export default (): ServerConf => ({
   env: 'production',
   database: db(),
-  security: security(
-    '*Ek--W0"6<wAKC7mu&P*IdVY=3oY01BcZ-nZ#-q"(ZBPfMpZ0VU[O(_!cS<i58o',
-  ),
+  security: security('*Ek--W0"6<wAKC7mu&P*IdVY=3oY01BcZ-nZ#-q"(ZBPfMpZ0VU[O(_!cS<i58o'),
   server: server({
     server: 'https://api.platip.com',
   }),

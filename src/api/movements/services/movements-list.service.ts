@@ -1,13 +1,7 @@
 import { Movement } from '../entities/movement.entity';
 import { CheckPoint } from '../entities/check-point.entity';
 import { TransactionStatus } from '../enums/status';
-import {
-  isAfterDate,
-  isBeforeDate,
-  isSameDate,
-  isSameOrAfterDate,
-  isSameOrBeforeDate,
-} from './utils';
+import { isAfterDate, isBeforeDate, isSameDate, isSameOrAfterDate, isSameOrBeforeDate } from './utils';
 
 export class MovementsListService {
   /**
@@ -41,6 +35,12 @@ export class MovementsListService {
     this.getDuplicatedMovement();
   }
 
+  static getTotalBalanceOfMovements(movements: Movement[]): number {
+    return movements.reduce((accumulator, currentMovement) => {
+      return accumulator + currentMovement.amount;
+    }, 0);
+  }
+
   /**
    * Retourne `true` si on a des transactions
    *
@@ -70,37 +70,6 @@ export class MovementsListService {
   }
 
   /**
-   * Retourne la liste des transactions en double
-   * et stock dans `this.duplicatedMovements` (instance de la classe)
-   *
-   * @returns {Movement[]}
-   */
-  private getDuplicatedMovement(): Movement[] {
-    this.duplicatedMovements = []; // Flush old value
-    this.uniqueMovements = this.movements.reduce(
-      (accumulator, currentMovement) => {
-        const duplicateMove: Movement = accumulator.find(
-          (move: Movement) =>
-            isSameDate(move.date, currentMovement.date) &&
-            move.amount === currentMovement.amount &&
-            move.wording === currentMovement.wording,
-        );
-        if (!duplicateMove) {
-          accumulator.push(currentMovement);
-        } else {
-          this.duplicatedMovements.push(
-            { ...duplicateMove, status: TransactionStatus.DUPLICATED },
-            { ...currentMovement, status: TransactionStatus.DUPLICATED },
-          );
-        }
-        return accumulator;
-      },
-      <Movement[]>[],
-    );
-    return this.duplicatedMovements;
-  }
-
-  /**
    * Retourne `true` si des transactions sont en double
    *
    * @returns {boolean}
@@ -116,9 +85,7 @@ export class MovementsListService {
    * @returns {Movement[]} Liste des transactions
    */
   getMovementsAfterCheckPoint(checkPoint: CheckPoint): Movement[] {
-    return this.movements.filter((movement: Movement) =>
-      isSameOrAfterDate(movement.date, checkPoint.date),
-    );
+    return this.movements.filter((movement: Movement) => isSameOrAfterDate(movement.date, checkPoint.date));
   }
 
   /**
@@ -128,9 +95,7 @@ export class MovementsListService {
    * @returns {Movement[]} Liste des transactions
    */
   getMovementsBeforeCheckPoint(checkPoint: CheckPoint): Movement[] {
-    return this.movements.filter((movement: Movement) =>
-      isSameOrBeforeDate(movement.date, checkPoint.date),
-    );
+    return this.movements.filter((movement: Movement) => isSameOrBeforeDate(movement.date, checkPoint.date));
   }
 
   /**
@@ -140,10 +105,7 @@ export class MovementsListService {
    * @param {CheckPoint} endCheckPoint deuxième point
    * @returns {Movement[]} Liste des transactions
    */
-  getMovementsBetweenCheckPoint(
-    startCheckPoint: CheckPoint,
-    endCheckPoint: CheckPoint,
-  ): Movement[] {
+  getMovementsBetweenCheckPoint(startCheckPoint: CheckPoint, endCheckPoint: CheckPoint): Movement[] {
     let start: Date = startCheckPoint.date;
     let end: Date = endCheckPoint.date;
 
@@ -153,16 +115,29 @@ export class MovementsListService {
       end = startCheckPoint.date;
     }
 
-    return this.movements.filter(
-      (movement: Movement) =>
-        isSameOrAfterDate(movement.date, start) &&
-        isSameOrBeforeDate(movement.date, end),
-    );
+    return this.movements.filter((movement: Movement) => isSameOrAfterDate(movement.date, start) && isSameOrBeforeDate(movement.date, end));
   }
 
-  static getTotalBalanceOfMovements(movements: Movement[]): number {
-    return movements.reduce((accumulator, currentMovement) => {
-      return accumulator + currentMovement.amount;
-    }, 0);
+  /**
+   * Retourne la liste des transactions en double
+   * et stock dans `this.duplicatedMovements` (instance de la classe)
+   *
+   * @returns {Movement[]}
+   */
+  private getDuplicatedMovement(): Movement[] {
+    this.duplicatedMovements = []; // Flush old value
+    this.uniqueMovements = this.movements.reduce(
+      (accumulator, currentMovement) => {
+        const duplicateMove: Movement = accumulator.find((move: Movement) => isSameDate(move.date, currentMovement.date) && move.amount === currentMovement.amount && move.label === currentMovement.label);
+        if (!duplicateMove) {
+          accumulator.push(currentMovement);
+        } else {
+          this.duplicatedMovements.push({ ...duplicateMove, status: TransactionStatus.DUPLICATED }, { ...currentMovement, status: TransactionStatus.DUPLICATED });
+        }
+        return accumulator;
+      },
+      <Movement[]>[],
+    );
+    return this.duplicatedMovements;
   }
 }

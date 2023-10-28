@@ -1,0 +1,21 @@
+## file extensions
+*.*
+package.json
+LICENSE
+!*.js
+!*.json
+!*.jsx
+!*.less
+!*.md
+!*.mdx
+!*.ts
+!*.tsx
+!*.yml
+
+## copied from .gitignore
+yarn.lock
+.expo/
+.idea/
+.assets/
+.node_modules/
+scripts/
